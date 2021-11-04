@@ -1,13 +1,13 @@
 \documentclass[
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
-codirector, % Uncomment to add a codirector to the title page
+%codirector, % Uncomment to add a codirector to the title page
 ]{charter} 
 
 
 
 
 % El títulos de la memoria, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \ttitle
-\titulo{Título del proyecto} 
+\titulo{Bootloader Multi-Etapa para Holter} 
 
 % Nombre del posgrado, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \degreename
 \posgrado{Carrera de Especialización en Sistemas Embebidos} 
@@ -17,18 +17,18 @@ codirector, % Uncomment to add a codirector to the title page
 %\posgrado{Maestría en Internet de las cosas}
 
 % Tu nombre, se puede usar el cualquier lugar del documento con el comando \authorname
-\autor{Nombre del Autor} 
+\autor{Ing. Lautaro Juan Bautista Vera} 
 
 % El nombre del director y co-director, se puede usar el cualquier lugar del documento con el comando \supname y \cosupname y \pertesupname y \pertecosupname
-\director{Nombre del Director}
-\pertenenciaDirector{pertenencia} 
+\director{Mg. Ing. Christian Yánez Flores}
+\pertenenciaDirector{INTI, FIUBA} 
 % FIXME:NO IMPLEMENTADO EL CODIRECTOR ni su pertenencia
-\codirector{John Doe} % para que aparezca en la portada se debe descomentar la opción codirector en el documentclass
-\pertenenciaCoDirector{FIUBA}
+%\codirector{John Doe} % para que aparezca en la portada se debe descomentar la opción codirector en el documentclass
+%\pertenenciaCoDirector{FIUBA}
 
 % Nombre del cliente, quien va a aprobar los resultados del proyecto, se puede usar con el comando \clientename y \empclientename
-\cliente{Nombre del cliente}
-\empresaCliente{Empresa del cliente}
+\cliente{Juan Pablo Trípodi}
+\empresaCliente{ECCOSUR}
 
 % Nombre y pertenencia de los jurados, se pueden usar el cualquier lugar del documento con el comando \jurunoname, \jurdosname y \jurtresname y \perteunoname, \pertedosname y \pertetresname.
 \juradoUno{Nombre y Apellido (1)}
@@ -68,8 +68,8 @@ codirector, % Uncomment to add a codirector to the title page
 \hline
 \rowcolor[HTML]{C0C0C0} 
 Revisión & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}Detalles de los cambios realizados} & Fecha      \\ \hline
-0      & Creación del documento                                 &\fechaInicioName \\ \hline
-%1      & Se completa hasta el punto 4 inclusive                 & dd/mm/aaaa \\ \hline
+0      & Creación del documento                                 & 22/10/2021 \\ \hline
+1      & Se completa hasta el punto 5 inclusive                 & 04/11/2021 \\ \hline
 %2      & Se completa hasta el punto 7 inclusive
 %		  Se puede agregar algo más \newline
 %		  En distintas líneas \newline
@@ -92,7 +92,7 @@ Buenos Aires, \fechaInicioName
 
 \vspace{2cm}
 
-Por medio de la presente se acuerda con el Ing. \authorname\hspace{1px} que su Trabajo Final de la \degreename\hspace{1px} se titulará ``\ttitle'', consistirá esencialmente en \textcolor{red}{la implementación de un prototipo de un sistema de control de temperatura de un calefón}, y tendrá un presupuesto preliminar estimado de \textcolor{red}{600} hs de trabajo y \textcolor{red}{\$XXX}, con fecha de inicio \fechaInicioName\hspace{1px} y fecha de presentación pública \fechaFinalName.
+Por medio de la presente se acuerda con el Ing. \authorname\hspace{1px} que su Trabajo Final de la \degreename\hspace{1px} se titulará ``\ttitle'', consistirá en el desarrollo de un bootloader multi-etapa con secureboot y tendrá un presupuesto preliminar estimado de 600 hs de trabajo y \$200, con fecha de inicio \fechaInicioName\hspace{1px} y fecha de presentación pública \fechaFinalName.
 
 Se adjunta a esta acta la planificación inicial.
 
@@ -116,38 +116,39 @@ Se adjunta a esta acta la planificación inicial.
 \label{sec:descripcion}
 
 
-\begin{consigna}{red} % El bloque "consigna" se usa para poner texto en rojo y dar una pequeña ayuda sobre cómo completar la sección
+Un bootloader es un programa cuyo principal propósito es permitir a los sistemas embebidos actualizar su software sin el uso de hardware especializado como puede ser un programador JTAG. En ciertos casos, puede ser utilizado como el punto más temprano para la validación de la integridad de un sistema embebido. Existen distintos tipos de bootloaders y pueden comunicarse a través de casi cualquier protocolo como USART, CAN, I2C, Ethernet, USB, entre otros.
 
-El objetivo es que el lector en una o dos páginas entienda de qué se trata el proyecto y cuáles son sus desafíos, su motivación y su importancia.
+El uso de bootloaders es mandatorio en la industria. Cumple una rol vital en el ciclo de vida del producto, precisamente en la etapa de mantenimiento, ya que permite actualizar el software para introducir parches y nuevas funcionalidades.
 
-Se debe destacar claramente cuál es el valor que agrega el proyecto a realizar. ``El presente proyecto se destaca especialmente por incorporar tal cosa... Esto lo diferencia de otros sistemas similares en que ...''
+En el caso del Holter de Eccosur, se tiene implementado un bootloader genérico USB, que cumple con la actualización del software mediante este protocolo. El firmware del Holter es bastante complejo, y el bootloader actual no está a la altura de las necesidades del producto. Se hace necesario una evolución hacia un bootloader de mayores prestaciones.
 
-Puede ser útil incluir en esta sección la respuesta a alguna de estas preguntas:
+El presente proyecto propone una innovación del bootloader actual del Holter, desarrollando un bootloader que comprenda las siguientes funcionalidades:
 
 \begin{itemize}
-	\item ¿Cómo se vincula este proyecto con la misión de la organización?
-	\item ¿Cómo se inserta este proyecto en el modelo de negocio de la organización?
-	\item ¿Ayuda a la explicación si se incluye un lienzo Canvas del Modelo de Negocio?
-	\item ¿En qué estado del ciclo de vida está el producto que se desea reemplazar o mejorar?
-	\item ¿Cuáles son las necesidades que debe satisfacer?
-	\item ¿Por dónde pasa la innovación?
+	\item Multi-etapa, con bootloader principal o \textit{bootmanager} y bootloader secundario o \textit{bootloader} propiamente dicho.
+	\item Capacidad de seleccionar el modo de operación mediante \textit{branching}, \textit{aplicación} o \textit{bootloader}.
+	\item Comunicación con un "Flasher" (host) a través del protocolo USB.
+	\item Capacidad de actualización y restauración del firmware.
+	\item Seguridad e integridad:
+	\begin{itemize}
+		\item Localización del bootloader en flash protegida.
+		\item \textit{Secureboot}: Sólo se ejecuta la aplicación si ésta es válida.
+		\item \textit{Checksum}: Verifica que no hubo cambios accidentales por pérdida de paquetes durante la transmisión de los paquetes.
+	\end{itemize}
 \end{itemize}
 
-La descripción técnica-conceptual \textbf{debe incluir al menos un diagrama en bloques del sistema} y una frase como la siguiente: ``En la Figura \ref{fig:diagBloques} se presenta el diagrama en bloques del sistema. Se observa que...''. Luego recién más abajo de haber puesto esta frase, se pone la figura. La regla es que las figuras nunca pueden ir antes de ser mencionadas en el texto, porque sino el lector no entiende por qué de pronto aparece una figura.
+En la figura 1 se puede observar el diagrama de bloques de un bootloader genérico de dos etapas. La primera etapa referida como "Branch" es el denominado \textit{bootmanager} y es donde se lleva a cabo el \textit{branching} y el \textit{secureboot}. La segunda etapa hace referencia al \textit{bootloader} y es donde se lleva a cabo la descarga de la imagen de software a través del protocolo correspondiente y su posterior actualización.
 
 %\vspace{25px}
 
 \begin{figure}[htpb]
 \centering 
-\includegraphics[width=.5\textwidth]{./Figuras/diagBloques.png}
+\includegraphics[width=.5\textwidth]{./Figuras/bootloader.png}
 \caption{Diagrama en bloques del sistema}
 \label{fig:diagBloques}
 \end{figure}
 
 \vspace{25px}
-
-El tamaño de la tipografía en TODAS las figuras debe ser adecuado para que NO pase lo que ocurre acá, donde el lector debe esforzarse para poder leer el texto. Los colores usados en el diagrama deben ser adecuados, tal que ayuden a comprender mejor el diagrama, preferentemente en la gama de colores pastel.
-\end{consigna}
 
 
 \section{2. Identificación y análisis de los interesados}
