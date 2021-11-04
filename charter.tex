@@ -7,7 +7,7 @@
 
 
 % El títulos de la memoria, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \ttitle
-\titulo{Bootloader Multi-Etapa para Holter} 
+\titulo{Bootloader Multi-Etapa} 
 
 % Nombre del posgrado, se usa en la carátula y se puede usar el cualquier lugar del documento con el comando \degreename
 \posgrado{Carrera de Especialización en Sistemas Embebidos} 
@@ -135,6 +135,7 @@ El presente proyecto propone una innovación del bootloader actual del Holter, d
 		\item \textit{Secureboot}: Sólo se ejecuta la aplicación si ésta es válida.
 		\item \textit{Checksum}: Verifica que no hubo cambios accidentales por pérdida de paquetes durante la transmisión de los paquetes.
 	\end{itemize}
+	\item Reutilizable, mediante un manual de integración un ingeniero idóneo debería ser capaz de incluir este bootloader en su proyecto.
 \end{itemize}
 
 En la figura 1 se puede observar el diagrama de bloques de un bootloader genérico de dos etapas. La primera etapa referida como "Branch" es el denominado \textit{bootmanager} y es donde se lleva a cabo el \textit{branching} y el \textit{secureboot}. La segunda etapa hace referencia al \textit{bootloader} y es donde se lleva a cabo la descarga de la imagen de software a través del protocolo correspondiente y su posterior actualización.
@@ -191,11 +192,7 @@ Por otro lado, el análsis de las características de los interesados es el sigu
 \section{3. Propósito del proyecto}
 \label{sec:proposito}
 
-\begin{consigna}{red}
-¿Por qué se hace el proyecto? ¿Qué se quiere lograr? 
-
-Se recomienda que sea solo un párrafo que empiece diciendo ``El propósito de este proyecto es...''.
-\end{consigna}
+El propósito de este proyecto es desarrollar un bootloader robusto, seguro, versátil y reutilizable con comunicación USB. El mismo debe cumplir con las funcionalidades descritas en la descripción técnica (sección 1) y se validará integrándose con el Holter de Eccosur.
 
 \section{4. Alcance del proyecto}
 \label{sec:alcance}
