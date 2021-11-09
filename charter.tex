@@ -68,9 +68,9 @@
 \hline
 \rowcolor[HTML]{C0C0C0} 
 Revisión & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}Detalles de los cambios realizados} & Fecha      \\ \hline
-0      & Creación del documento                                 & 22/10/2021 \\ \hline
-1      & Se completa hasta el punto 5 inclusive                 & 04/11/2021 \\ \hline
-%2      & Se completa hasta el punto 7 inclusive
+0      & Creación del documento                                 				& 22/10/2021 \\ \hline
+1      & Se completa hasta el punto 5 inclusive                 				& 04/11/2021 \\ \hline
+2      & Correcciones de la versión 1. Se completa hasta el punto 9 inclusive	& 08/11/2021 \\ \hline
 %		  Se puede agregar algo más \newline
 %		  En distintas líneas \newline
 %		  Así                                                    & dd/mm/aaaa \\ \hline
@@ -92,7 +92,7 @@ Buenos Aires, \fechaInicioName
 
 \vspace{2cm}
 
-Por medio de la presente se acuerda con el Ing. \authorname\hspace{1px} que su Trabajo Final de la \degreename\hspace{1px} se titulará ``\ttitle'', consistirá en el desarrollo de un bootloader multi-etapa con secureboot y tendrá un presupuesto preliminar estimado de 600 hs de trabajo y \$200, con fecha de inicio \fechaInicioName\hspace{1px} y fecha de presentación pública \fechaFinalName.
+Por medio de la presente se acuerda con el \authorname\hspace{1px} que su Trabajo Final de la \degreename\hspace{1px} se titulará ``\ttitle'', consistirá en el desarrollo de un bootloader multi-etapa con \textit{secureboot} y tendrá un presupuesto preliminar estimado de 600 hs de trabajo y \$200, con fecha de inicio \fechaInicioName\hspace{1px} y fecha de presentación pública \fechaFinalName.
 
 Se adjunta a esta acta la planificación inicial.
 
@@ -119,32 +119,36 @@ Un bootloader es un programa cuyo principal propósito es permitir a los sistema
 
 El uso de bootloaders es mandatorio en la industria. Cumple una rol vital en el ciclo de vida del producto, precisamente en la etapa de mantenimiento, ya que permite actualizar el software para introducir parches y nuevas funcionalidades.
 
-En el caso del Holter de Eccosur, se tiene implementado un bootloader genérico USB, que cumple con la actualización del software mediante este protocolo. El firmware del Holter es bastante complejo, y el bootloader actual no está a la altura de las necesidades del producto. Se hace necesario una evolución hacia un bootloader de mayores prestaciones.
+Los bootloaders en general son reutilizables y sólo dependen de la arquitectura del sistema y no de la aplicación o caso de uso.
+
+El cliente ECCOSUR, auspiciante de este proyecto, requiere que el desarrollo tenga lugar dentro del ciclo de vida de su producto, un electrocardiógrafo ambulatorio Holter. Se tiene entonces en este proyecto que el caso de uso es el Holter de ECCOSUR
+
+Respecto al Holter, su situación actual es la de un bootloader genérico USB, que cumple con la actualización del software mediante este protocolo. El firmware del Holter es bastante complejo, y el bootloader actual no está a la altura de las necesidades del producto. Se hace necesario una evolución hacia un bootloader de mayores prestaciones.
 
 El presente proyecto propone una innovación del bootloader actual del Holter, desarrollando un bootloader que comprenda las siguientes funcionalidades:
 
 \begin{itemize}
-	\item Multi-etapa, con bootloader principal o \textit{bootmanager} y bootloader secundario o \textit{bootloader} propiamente dicho.
-	\item Capacidad de seleccionar el modo de operación mediante \textit{branching}, \textit{aplicación} o \textit{bootloader}.
+	\item Multi-etapa, con etapa primaria (\textit{bootmanager}) y etapa secundaria (\textit{bootloader} propiamente dicho).
+	\item Capacidad de seleccionar el modo de operación mediante \textit{branching}, aplicación o \textit{bootloader}.
 	\item Comunicación con un "Flasher" (host) a través del protocolo USB.
 	\item Capacidad de actualización y restauración del firmware.
 	\item Seguridad e integridad:
 	\begin{itemize}
 		\item Localización del bootloader en flash protegida.
-		\item \textit{Secureboot}: Sólo se ejecuta la aplicación si ésta es válida.
-		\item \textit{Checksum}: Verifica que no hubo cambios accidentales por pérdida de paquetes durante la transmisión de los paquetes.
+		\item \textit{Secureboot}: sólo se ejecuta la aplicación si ésta es válida.
+		\item \textit{Checksum}: verifica que no hubo cambios accidentales por pérdida de paquetes durante la transmisión de los paquetes.
 	\end{itemize}
 	\item Reutilizable, mediante un manual de integración un ingeniero idóneo debería ser capaz de incluir este bootloader en su proyecto.
 \end{itemize}
 
-En la figura 1 se puede observar el diagrama de bloques de un bootloader genérico de dos etapas. La primera etapa referida como "Branch" es el denominado \textit{bootmanager} y es donde se lleva a cabo el \textit{branching} y el \textit{secureboot}. La segunda etapa hace referencia al \textit{bootloader} y es donde se lleva a cabo la descarga de la imagen de software a través del protocolo correspondiente y su posterior actualización.
+En la figura 1 se puede observar el diagrama de bloques de un bootloader genérico de dos etapas. La primera etapa referida como ``Branch'' es el denominado \textit{bootmanager} y es donde se lleva a cabo el \textit{branching} y el \textit{secureboot}. La segunda etapa hace referencia al \textit{bootloader} y es donde se lleva a cabo la descarga de la imagen de software a través del protocolo correspondiente y su posterior actualización.
 
 %\vspace{25px}
 
 \begin{figure}[htpb]
 \centering 
 \includegraphics[width=.5\textwidth]{./Figuras/bootloader.png}
-\caption{Diagrama en bloques del sistema}
+\caption{Diagrama en bloques del sistema.}
 \label{fig:diagBloques}
 \end{figure}
 
@@ -176,12 +180,12 @@ Orientador    & \supname	      & \pertesupname 	& Director Trabajo final \\ \hli
 \end{tabularx}
 \end{table}
 
-Por otro lado, el análsis de las características de los interesados es el siguiente:
+Por otro lado, el análisis de las características de los interesados es el siguiente:
 
 \begin{itemize}
 	\item Auspiciante: Es proactivo a la hora de brindar recursos técnicos.
 	\item Cliente: Tiene especial interés en la innovación en seguridad e integridad del nuevo bootloader.
-	\item Responsable: Tiene experiencia en bootloaders pero no en la arquitectura del microcontrolador del Holter (Texas Instruments). Trabaja jornada completa, puede saturarse de tareas con mala planificación.
+	\item Responsable: Tiene experiencia en bootloaders pero no en la arquitectura del microcontrolador del Holter (Texas Instruments). Trabaja jornada completa, puede saturarse de tareas. Para evitar que esto ocurra es fundamental una buena planificación.
 	\item Orientador: Tiene experiencia en la definición de proyectos. Puede dar buen soporte a la hora de definir requerimientos y el desglose de tareas.
 \end{itemize}
 
@@ -219,114 +223,139 @@ Para el desarrollo exitoso del proyecto se tienen las siguientes hipótesis:
 
 \begin{itemize}
 	\item El responsable tiene experiencia en bootloaders pero no con arquitecturas de Texas Instruments.
-	\item El cliente compartirá todo el código fuente de la aplicación del Holter.
+	\item El cliente compartirá todo el código fuente de la aplicación del dispositivo Holter.
 	\item El conocimiento en Makefile y Linker Scripts serán claves a la hora del desarrollo del proyecto.
-	\item El stack de comunicación USB podrá ser directamente reutilizado.
-	\item La memoria flash del microcontrolador es suficiente para almacenar una imagen estable para la restauración y la imagen nueva para la actualización.
+	\item El \textit{stack} de comunicación USB podrá ser directamente reutilizado.
+	\item La memoria \textit{flash} del microcontrolador es suficiente para almacenar una imagen estable para la restauración y la imagen nueva para la actualización.
 \end{itemize}
 
 \section{6. Requerimientos}
 \label{sec:requerimientos}
 
-\begin{consigna}{red}
-Los requerimientos deben numerarse y de ser posible estar agruparlos por afinidad, por ejemplo:
-
 \begin{enumerate}
 	\item Requerimientos funcionales
 		\begin{enumerate}
-			\item El sistema debe...
-			\item Tal componente debe...
-			\item El usuario debe poder...
+			\item El proyecto será desarrollado y mantenido mediante control de versiones \textit{GIT}.
+			\item El proyecto será desarrollado en lenguaje C, compilado con \textit{TI ARM-CGT 20.2.2.LTS} siguiendo la guía de estilos y analizado 
+			estáticamente con la herramienta \textit{Splint}.
+			\item El \textit{bootmanager} implementará \textit{branching} de manera segura.
+			\item El \textit{bootmanager} implementará \textit{secureboot} para chequeos de origen de firmware antes de un salto a aplicación. 
+			\item El \textit{bootloader} actualizará correctamente la versión de firmware actual por una nueva versión certificada 	
+			(\textit{Update}).
+			\item El \textit{bootloader} restaurará el sistema a la última versión estable instalada en caso de cualquier defecto en la 
+			instalación o en el funcionamiento de nuevas versiones \textit{Rollback}.
+			\item El \textit{bootloader} soportará comunicación USB para descargar imágenes de firmware.
+			\item El \textit{bootloader} soportará el formato de imagen binaria \textit{Motorola SREC}.
+			\item El \textit{bootloader} implementará funciones de redundancia cíclica, \textit{CRC} y \textit{checksum} tanto durante la descarga 
+			USB como la instalación.
 		\end{enumerate}
 	\item Requerimientos de documentación
 		\begin{enumerate}
-			\item Requerimiento 1
-			\item Requerimiento 2 (prioridad menor)
+			\item El código será documentado con la herramienta \textit{Doxygen}.
+			\item El ciclo de vida del presente proyecto será respaldado por una memoria técnica.
+			\item La integración del bootloader en otras aplicaciones y casos de uso será facilitada mediante un manual de integración.
 		\end{enumerate}
-	\item Requerimiento de testing...
-	\item Requerimientos de la interfaz...
-	\item Requerimientos interoperabilidad...
-	\item etc...
+	\item Requerimiento de testing
+		\begin{enumerate}
+			\item Se desarrollará un script en lenguaje \textit{Python} que cumpla con la funcionalidad mínima de \textit{host} para la descarga USB 
+			de la imagen.
+			\item Se validará el correcto funcionamiento del bootloader multi-etapa utilizando el script de \textit{Python} como \textit{host}.
+		\end{enumerate}
+	\item Requerimientos opcionales
+		\begin{enumerate}
+			\item En caso de que se desee un \textit{bootmanager} y \textit{bootloader}, serán dejados fuera de la sección protegida de la memoria.
+		\end{enumerate}
 \end{enumerate}
-
-Leyendo los requerimientos se debe poder interpretar cómo será el proyecto y su funcionalidad.
-
-Indicar claramente cuál es la prioridad entre los distintos requerimientos y si hay requerimientos opcionales. 
-
-No olvidarse de que los requerimientos incluyen a las regulaciones y normas vigentes!!!
-
-Y al escribirlos seguir las siguientes reglas:
-\begin{itemize}
-	\item Ser breve y conciso (nadie lee cosas largas). 
-	\item Ser específico: no dejar lugar a confusiones.
-	\item Expresar los requerimientos en términos que sean cuantificables y medibles.
-\end{itemize}
-
-\end{consigna}
 
 \section{7. Historias de usuarios (\textit{Product backlog})}
 \label{sec:backlog}
 
-\begin{consigna}{red}
-Descripción: En esta sección se deben incluir las historias de usuarios y su ponderación (\textit{history points}). Recordar que las historias de usuarios son descripciones cortas y simples de una característica contada desde la perspectiva de la persona que desea la nueva capacidad, generalmente un usuario o cliente del sistema. La ponderación es un número entero que representa el tamaño de la historia comparada con otras historias de similar tipo.
-
-El formato propuesto es: "como [rol] quiero [tal cosa] para [tal otra cosa]."
-
-Se debe indicar explícitamente el criterio para calcular los \textit{story points} de cada historia
-\end{consigna}
+\begin{table}[ht]
+\begin{tabularx}{\linewidth}{@{}|X|c|c|@{}}
+\hline
+\rowcolor[HTML]{C0C0C0}
+Historia de usuario 															& Prioridad & Ponderación	\\ \hline
+Como cliente, quiero un bootloader que actualice imágenes de forma segura. 	  	& 8        	& 10      		\\ \hline
+Como cliente, quiero que el bootloader se valide con un aplicación "host".    	& 9        	& 7       		\\ \hline
+Como responsable, quiero asegurar la integridad de los datos y la instalación. 	& 10       	& 10      		\\ \hline
+Como técnico integrador, quiero poder reutilizar el bootloader.               	& 5        	& 6       		\\ \hline
+\end{tabularx}
+\end{table}
 
 \section{8. Entregables principales del proyecto}
 \label{sec:entregables}
 
-\begin{consigna}{red}
-
-Los entregables del proyecto son (ejemplo):
-
 \begin{itemize}
-	\item Manual de uso
-	\item Diagrama de circuitos esquemáticos
-	\item Código fuente del firmware
-	\item Diagrama de instalación
-	\item Informe final
-	\item etc...
+	\item Código fuente del bootloader multi-etapa.
+	\item Código fuente del script \textit{host}.
+	\item Documentación HTML del código con \textit{Doxygen}. 
+	\item Manual de integración.
+	\item Memoria Técnica.
 \end{itemize}
-
-\end{consigna}
 
 \section{9. Desglose del trabajo en tareas}
 \label{sec:wbs}
 
-\begin{consigna}{red}
-El WBS debe tener relación directa o indirecta con los requerimientos.  Son todas las actividades que se harán en el proyecto para dar cumplimiento a los requerimientos. Se recomienda mostrar el WBS mediante una lista indexada:
-
 \begin{enumerate}
-\item Grupo de tareas 1
+\item Planificación
 	\begin{enumerate}
-	\item Tarea 1 (tantas hs)
-	\item Tarea 2 (tantas hs)
-	\item Tarea 3 (tantas hs)
+	\item Toma de requerimientos (10 hs).
+	\item Análisis de requerimientos (40 hs).
+	\item Desarrollo de documentación relativa a la planificación (10 hs).
 	\end{enumerate}
-\item Grupo de tareas 2
+\item Estudio
 	\begin{enumerate}
-	\item Tarea 1 (tantas hs)
-	\item Tarea 2 (tantas hs)
-	\item Tarea 3 (tantas hs)
+	\item Arquitectura del MCU TI MSP430FR5994 (40 hs).
+	\item Makefile (6 hs).
+	\item CMake (6 hs).
+	\item Linker scripts (6 hs).
 	\end{enumerate}
-\item Grupo de tareas 3
+\item Diseño del \textit{bootmanager}
 	\begin{enumerate}
-	\item Tarea 1 (tantas hs)
-	\item Tarea 2 (tantas hs)
-	\item Tarea 3 (tantas hs)
-	\item Tarea 4 (tantas hs)
-	\item Tarea 5 (tantas hs)
+	\item \textit{Branching} (2 hs).
+	\item \textit{Secureboot} (40 hs).
+	\item Máquina de estados finitos (40 hs).
+	\item Componente NIR (20 hs).
+	\end{enumerate}
+\item Diseño del \textit{bootloader}
+	\begin{enumerate}
+	\item \textit{Update} (40 hs).
+	\item \textit{Rollback} (40 hs).
+	\item \textit{CRC} y \textit{Checksum} (40 hs).
+	\item Integración del stack USB del \textit{legacy} bootloader (10 hs).
+	\item Máquina de estados finitos (40 hs).
+	\end{enumerate}
+\item Codificación y depuración
+	\begin{enumerate}
+	\item Makefile/CMake scripts (20 hs).
+	\item Linker scripts (20 hs).
+	\item \textit{Bootmanager} (10 hs).
+	\item \textit{Bootloader} (30 hs).
+	\item Comentarios \textit{Doxygen} y páginas \textit{Markdown} (6 hs).
+	\end{enumerate}
+\item Script \textit{host}
+	\begin{enumerate}
+	\item Estudio (10 hs).
+	\item Diseño (10 hs).
+	\item Implementación (10 hs).
+	\end{enumerate}
+\item Validación
+	\begin{enumerate}
+	\item Test de \textit{Upload} (6 hs).
+	\item Test de \textit{Update} (6 hs).
+	\item Test de \textit{Rollback} (10 hs).
+	\item Test de seguridad (40 hs).
+	\end{enumerate}
+\item Documentación
+	\begin{enumerate}
+	\item Documentación HTML con \textit{Doxygen} (6 hs).
+	\item Manual de integración en \textit{Markdown} (6 hs).
+	\item Memoria técnica (40 hs).
 	\end{enumerate}
 \end{enumerate}
 
-Cantidad total de horas: (tantas hs)
 
-Se recomienda que no haya ninguna tarea que lleve más de 40 hs. 
-
-\end{consigna}
+Cantidad total de horas: (620 hs)
 
 \section{10. Diagrama de Activity On Node}
 \label{sec:AoN}
